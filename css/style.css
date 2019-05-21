@@ -1,0 +1,7 @@
+body {
+  padding-top: 100px;
+}
+
+.min-height {
+  min-height: 80vh;
+}
