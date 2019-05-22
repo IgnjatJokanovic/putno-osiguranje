@@ -6,10 +6,13 @@ if(isset($_GET['page']))
     switch($_GET['page'])
     {
         case "pregled":
-            require_once "views/pregled_polisa.php";
+            require "views/pregled_polisa.php";
+            break;
+        case "jedan":
+            require "views/pregled_polise.php";
             break;
         default:
-            require_once "views/unos_polise.php";
+            require "views/unos_polise.php";
             break;
     }
 

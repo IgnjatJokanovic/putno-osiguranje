@@ -11,7 +11,6 @@ $(document).ready(function() {
     var datum_od = $("#od").val();
     var datum_do = $("#do").val();
     var tip_polise = $("#tip").val();
-    var broj_dana;
     var dodatni_korisnici = Array();
     var greske = Array();
     if (tip_polise != 1) {
@@ -48,6 +47,46 @@ $(document).ready(function() {
       greske.push("Polje datum do je obavezno");
     }
     if (greske.length == 0) {
+      var polisa = {
+        ime: ime_prezime,
+        datum_rodjenja: datum_rodjenja,
+        pasos: pasos,
+        telefon: telefon,
+        email: email,
+        datum_od: datum_od,
+        datum_do: datum_do,
+        tip_polise: tip_polise,
+        broj_dana: window.broj_dana
+      };
+      $.ajax({
+        type: "POST",
+        url: "http://localhost/putno-osiguranje/php/unos.php",
+        data: { korisnici: dodatni_korisnici, polisa: polisa },
+        success: function(response) {
+          var txt = `<div class="alert alert-success text-center">${response}</div>`;
+          $("#greske").html(txt);
+          $("html, body").animate(
+            {
+              scrollTop: $("#greske")
+            },
+            1000
+          );
+        },
+        error: function(response) {
+          var greske_response = response.responseJSON;
+          var text = "";
+          $.each(greske_response, function(key, value) {
+            text += `<div class="alert alert-danger text-center">${value}</div>`;
+          });
+          $("#greske").html(response.responseText);
+          $("html, body").animate(
+            {
+              scrollTop: $("#greske")
+            },
+            1000
+          );
+        }
+      });
     } else {
       var tekst = "";
       $.each(greske, function(key, value) {
@@ -68,10 +107,10 @@ $(document).ready(function() {
       var dan = 24 * 60 * 60 * 1000;
       var prvi = new Date($(this).val());
       var drugi = new Date($("#do").val());
-      this.broj_dana = Math.floor((prvi.getTime() - drugi.getTime()) / dan);
+      window.broj_dana = Math.floor((prvi.getTime() - drugi.getTime()) / dan);
       $("#dani").html(`<div class="alert alert-primary mt-2 text-center">
         Trajanje: ${
-          this.broj_dana <= 0 ? "Lose ste uneli podatke" : this.broj_dana
+          window.broj_dana <= 0 ? "Lose ste uneli podatke" : window.broj_dana
         } dana
     </div>`);
     }
@@ -82,10 +121,10 @@ $(document).ready(function() {
       var dan = 24 * 60 * 60 * 1000;
       var prvi = new Date($(this).val());
       var drugi = new Date($("#od").val());
-      this.broj_dana = Math.floor((prvi.getTime() - drugi.getTime()) / dan);
+      window.broj_dana = Math.floor((prvi.getTime() - drugi.getTime()) / dan);
       $("#dani").html(`<div class="alert alert-primary mt-2 text-center">
         Trajanje: ${
-          this.broj_dana <= 0 ? "Lose ste uneli podatke" : this.broj_dana
+          window.broj_dana <= 0 ? "Lose ste uneli podatke" : window.broj_dana
         } dana
     </div>`);
     }

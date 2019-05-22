@@ -1,13 +1,16 @@
 <?php
 require "vendor/autoload.php";
 use Models\Osiguranje;
-$polise = Osiguranje::svi();
-
+use Models\DodatniKorisnik;
+$id = $_GET['id'];
+$polisa = Osiguranje::jedan($id);
+$korisnici = DodatniKorisnik::korisnici($id);
 ?>
 
 <div class="container-fluid min-height">
   <div class="row">
     <div class="col-12">
+    <h1>Osiguranje:</h1>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -25,8 +28,6 @@ $polise = Osiguranje::svi();
           </tr>
         </thead>
         <tbody>
-         
-          <?php foreach($polise as $polisa): ?>
           <tr>
             <th scope="row"><?= $polisa->id ?></th>
             <td><?= date("d,M,Y", $polisa->pravljenje) ?></td>
@@ -38,10 +39,32 @@ $polise = Osiguranje::svi();
             <td><?= date("d,M,Y", $polisa->od) ?></td>
             <td><?= date("d,M,Y",$polisa->do) ?></td>
             <td><?= $polisa->trajanje ?></td>
-            <td><?= $polisa->naziv ?><?= $polisa->tip_id==2?"<br/><a class='btn btn-primary mt-2' href='index.php?page=jedan&id=$polisa->id'>Detaljnije</a>":'' ?></td>
+            <td><?= $polisa->naziv ?></td>
           </tr>
-          <?php endforeach;?>
           
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+    <h1>Korisnici osiguranja:</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Ime i Prezime</th>
+            <th scope="col">Datum rodjenja</th>
+            <th scope="col">Broj Pasosa</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach($korisnici as $korisnik): ?>
+          <tr>
+            <td><?= $korisnik->ime_prezime ?></td>
+            <td><?= date("d,M,Y", $korisnik->datum_rodjenja) ?></td>
+            <td><?= $korisnik->broj_pasosa ?></td>
+          </tr>
+        <?php endforeach; ?>
         </tbody>
       </table>
     </div>

@@ -1,3 +1,12 @@
+<?php
+require "vendor/autoload.php";
+use Models\Tip;
+$tipovi = Tip::svi();
+
+?>
+
+
+
 <div class="container min-height">
     <div id="greske">
 
@@ -40,8 +49,9 @@
     <div class="form-group">
         <label for="tip">Izaberite Tip polise</label>
         <select class="form-control" id="tip">
-            <option value="1">Pojedinačna</option>
-            <option value="2">Grupna</option>
+            <?php foreach($tipovi as $tip):?>
+            <option value="<?=$tip->id?>"><?=$tip->naziv?></option>
+            <?php endforeach; ?>
         </select>
     </div>
     <div class="form-group d-none" id="dodatni_korisnici">
